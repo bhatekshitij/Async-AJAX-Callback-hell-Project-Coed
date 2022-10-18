@@ -42,7 +42,7 @@ getCountryData('USA');
 
 
 getCountryData('india');
-
+*/
 
 
 
@@ -62,7 +62,7 @@ const _renderCountry = function (data, className = '') {
   countriesContainer.style.opacity = 1;
 }
 
-
+/*
 
 const getCountryAndNeighbours = function (country) {
 
@@ -112,19 +112,35 @@ getCountryAndNeighbours('sri lanka');
 
 
 
+//////////////// the below part of the code is the with the default syntax and not actual arrow function
 
-
-
+/*
 const getCountryData = function (country) {
   fetch(`https://restcountries.com/v2/name/${country}`).then(function (response) {
     console.log(response);
-    response.json()
+    return response.json();
+
   }).then(function (data) {
     console.log(data);
+    _renderCountry(data[0]);
+
 
   })
 
 }
+*/
+
+
+// the below part of the code is same as first but with refactured and wrote a clear code
+
+const getCountryData = function (country) {
+  fetch(`https://restcountries.com/v2/name/${country}`)
+    .then((response) => response.json())
+    .then(data => _renderCountry(data[0]))
+
+}
+
+
 
 
 
