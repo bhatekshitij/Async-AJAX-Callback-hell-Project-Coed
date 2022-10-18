@@ -45,6 +45,14 @@ getCountryData('india');
 */
 
 
+const renderError = function (msg) {
+
+  countriesContainer.insertAdjacentText('beforeend', msg);
+  //countriesContainer.style.opacity = 1;
+
+
+
+}
 
 
 const _renderCountry = function (data, className = '') {
@@ -59,7 +67,7 @@ const _renderCountry = function (data, className = '') {
   </div>
 </article>`
   countriesContainer.insertAdjacentHTML('beforeend', html);
-  countriesContainer.style.opacity = 1;
+  //countriesContainer.style.opacity = 1;
 }
 
 /*
@@ -136,12 +144,30 @@ const getCountryData = function (country) {
 const getCountryData = function (country) {
   fetch(`https://restcountries.com/v2/name/${country}`)
     .then((response) => response.json())
-    .then(data => _renderCountry(data[0]))
+    .then(data => {
+
+
+      _renderCountry(data[0])  // first AJAX call fullfilled over here 
+      console.log(data[0]); // result of the first AJAX call
+      const neighbour = data[0].borders?.[0]; // accessing a array value from the first AJAx call 
+      if (!neighbour) return;
+
+      return fetch(`https://restcountries.com/v2/alpha/${neighbour}`);  ///Second Ajax call
+    }).then(response => response.json()) // converting it to Javascript object 
+    .then(data => _renderCountry(data, 'neighbour')) // rendering the slide in the DOM.
+    .catch(err => renderError(`Something went wrong. ${err.message}. Try again`))
+    .finally(() => {
+
+      countriesContainer.style.opacity = 1;
+
+    });
+
 
 }
 
 
 
 
+btn.addEventListener('click', function () { getCountryData('Germany') });
 
-getCountryData('Portugal')
+
