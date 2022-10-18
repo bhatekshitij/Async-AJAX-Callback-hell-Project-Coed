@@ -44,7 +44,7 @@ getCountryData('USA');
 getCountryData('india');
 
 
-*/
+
 
 
 const _renderCountry = function (data, className = '') {
@@ -105,3 +105,21 @@ const getCountryAndNeighbours = function (country) {
 }
 
 getCountryAndNeighbours('sri lanka');
+
+
+*/
+
+
+
+
+
+
+
+const getCountryData = function (Country) {
+  const request = fetch(`https://restcountries.com/v2/name/${Country}`).then(function (response) {
+    console.log(response)
+  })
+}
+
+
+getCountryData('Portugal')
