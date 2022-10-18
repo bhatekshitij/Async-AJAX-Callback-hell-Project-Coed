@@ -115,12 +115,16 @@ getCountryAndNeighbours('sri lanka');
 
 
 
-const getCountryData = function (Country) {
-  const request = fetch(`https://restcountries.com/v2/name/${Country}`).then(function (response) {
-    console.log(response)
-  })
-}
+const getCountryData = function (country) {
+  fetch(`https://restcountries.com/v2/name/${country}`).then(function (response) {
+    console.log(response);
+    response.json()
+  }).then(function (data) {
+    console.log(data);
 
+  })
+
+}
 
 
 
