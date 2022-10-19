@@ -153,7 +153,8 @@ const getCountryData = function (country) {
       if (!neighbour) return;
 
       return fetch(`https://restcountries.com/v2/alpha/${neighbour}`);  ///Second Ajax call
-    }).then(response => response.json()) // converting it to Javascript object 
+    })
+    .then(response => response.json()) // converting it to Javascript object 
     .then(data => _renderCountry(data, 'neighbour')) // rendering the slide in the DOM.
     .catch(err => renderError(`Something went wrong. ${err.message}. Try again`))
     .finally(() => {
