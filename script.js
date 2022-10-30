@@ -92,7 +92,7 @@ const getCountryAndNeighbours = function (country) {
 
     if (!neighbour) return;
 
-    // 2nd AJAX call 
+    // 2nd AJAX call
     const request2 = new XMLHttpRequest()
     request2.open('GET', `https://restcountries.com/v2/alpha/${neighbour}`);
 
@@ -150,7 +150,7 @@ const getCountryData = function (country) {
       _renderCountry(data[0])  // first AJAX call fullfilled over here 
       console.log(data[0]); // result of the first AJAX call
       const neighbour = data[0].borders?.[0]; // accessing a array value from the first AJAx call 
-      if (!neighbour) return;
+      if (!neighbour) return; //gaurd if condition
 
       return fetch(`https://restcountries.com/v2/alpha/${neighbour}`);  ///Second Ajax call
     })
