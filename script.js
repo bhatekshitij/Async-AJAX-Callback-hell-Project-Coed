@@ -67,7 +67,7 @@ const _renderCountry = function (data, className = '') {
   </div>
 </article>`
   countriesContainer.insertAdjacentHTML('beforeend', html);
-  //countriesContainer.style.opacity = 1;
+  countriesContainer.style.opacity = 1;
 }
 
 /*
@@ -150,7 +150,7 @@ const getJSON = function (url, errorMSg = 'Something went wrong ') {
 
 }
 // the below part of the code is same as first but with refactured and wrote a clear code
-
+/*
 const getCountryData = function (country) {
   getJSON(`https://restcountries.com/v2/name/${country}`, 'Country not found')
     .then(data => {
@@ -172,7 +172,7 @@ const getCountryData = function (country) {
 
 }
 
-
+*/
 
 /* 
 const getCountryData = function (country) {
@@ -199,7 +199,6 @@ const getCountryData = function (country) {
     .finally(() => {
 
       countriesContainer.style.opacity = 1;
-
     });
 
 
@@ -208,10 +207,79 @@ const getCountryData = function (country) {
 
  */
 
-
-
-
 btn.addEventListener('click', function () { getCountryData('Germany') });
 
 
-getCountryData('Australia');
+
+
+
+
+
+///////////// Coding challenge 1
+
+/*
+const whereAmI = function (lat, long) {
+  //fetch(`https://geocode.xyz/${lat},${long}?geoit=json`).
+  fetch(`https://geocode.xyz/${lat},${long}?geoit=json&auth=139180836449984e15939443x17477`).
+    then(resp => {
+
+      if (!resp.ok) throw new Error(`Problem with Geocoding ${resp.status}`);
+
+      console.log(resp)
+      return resp.json()
+
+    }).
+    then(data => {
+      console.log(data);
+      console.log(`you are in ${data.city}, ${data.country}`)
+
+      return fetch(`https://restcountries.com/v2/name/${data.country}`)
+    }).then(res => {
+
+      if (!res.ok) throw new Error(`Country Not Found ${res.status}`);
+      return res.json();
+
+    }).then(data => _renderCountry(data[0]))
+
+
+    .catch(err => {
+      console.log(err.message);
+    })
+
+
+}
+
+
+whereAmI(19.037, 72.873)*/
+//whereAmI(52.508, 13.381)
+//whereAmI(-33.933, 18.474)
+
+
+
+
+const whereIAm = function (lat, long) {
+
+  fetch(`https://geocode.xyz/${lat},${long}?geoit=json&auth=139180836449984e15939443x17477`)
+    .then(res => {
+      console.log(res);
+      if (!res.ok) throw new Error(`GeoLocation Api failed ${res.status}`)
+      return res.json();
+    }).then(data => {
+      console.log(data);
+
+      return fetch(`https://restcountries.com/v2/name/${data.country}`);
+    }).then(resp => {
+
+      if (!resp.ok) throw new Error(`No Country found ${resp.status}`)
+      return resp.json();
+    }).then(data => {
+
+      if (!data[0] == undefined) throw new Error(`Data was not found ${data.message}`)
+      _renderCountry(data[0])
+      console.log(data)
+    })
+  //.catch(err => console.log(err.message))
+
+}
+
+whereIAm(52.508, 13.381);
