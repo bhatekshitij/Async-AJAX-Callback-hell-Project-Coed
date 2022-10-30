@@ -139,14 +139,53 @@ const getCountryData = function (country) {
 */
 
 
+
+const getJSON = function (url, errorMSg = 'Something went wrong ') {
+  return fetch(url).then(response => {
+    if (!response.ok) throw new Error(`${errorMSg} ${response.status}`)
+    return response.json();
+  })
+
+
+
+}
 // the below part of the code is same as first but with refactured and wrote a clear code
 
 const getCountryData = function (country) {
-  fetch(`https://restcountries.com/v2/name/${country}`)
-    .then((response) => response.json())
+  getJSON(`https://restcountries.com/v2/name/${country}`, 'Country not found')
     .then(data => {
+      _renderCountry(data[0])  // first AJAX call fullfilled over here 
+      console.log(data[0]); // result of the first AJAX call
+      const neighbour = data[0].borders?.[0]; // accessing a array value from the first AJAx call 
+      if (!neighbour) throw new Error('No Neighbour Found!'); //gaurd if condition
+
+      return getJSON(`https://restcountries.com/v2/alpha/${neighbour}`, 'Country not found ');  ///Second Ajax call
+    })
+    .then(data => _renderCountry(data, 'neighbour')) // rendering the slide in the DOM.
+    .catch(err => renderError(`Something went wrong. ${err.message}. Try again`))
+    .finally(() => {
+
+      countriesContainer.style.opacity = 1;
+
+    });
 
 
+}
+
+
+
+/* 
+const getCountryData = function (country) {
+  fetch(`https://restcountries.com/v2/name/${country}`)
+    .then((response) => {
+      console.log(response.ok)
+      if (!response.ok) {
+        throw new Error(`Country not found ${response.status}`);
+
+      }
+      return response.json()
+    })
+    .then(data => {
       _renderCountry(data[0])  // first AJAX call fullfilled over here 
       console.log(data[0]); // result of the first AJAX call
       const neighbour = data[0].borders?.[0]; // accessing a array value from the first AJAx call 
@@ -167,8 +206,12 @@ const getCountryData = function (country) {
 }
 
 
+ */
+
+
 
 
 btn.addEventListener('click', function () { getCountryData('Germany') });
 
 
+getCountryData('Australia');
